@@ -1,0 +1,43 @@
+**Commandes de base**  
+- `Get-Help` – Affiche l’aide sur une commande  
+- `Get-Command` – Liste toutes les commandes disponibles  
+- `Get-Process` – Liste les processus  
+- `Stop-Process` – Arrête un processus  
+- `Get-Service` – Liste les services  
+- `Start-Service` – Démarre un service  
+- `Stop-Service` – Arrête un service  
+- `Restart-Service` – Redémarre un service  
+- `Get-EventLog` – Affiche les logs systèmes  
+- `Get-Content` – Lit le contenu d’un fichier  
+- `Set-Content` – Écrit dans un fichier  
+- `Add-Content` – Ajoute du contenu dans un fichier  
+- `Copy-Item` – Copie des fichiers/dossiers  
+- `Move-Item` – Déplace ou renomme  
+- `Remove-Item` – Supprime des fichiers/dossiers  
+- `New-Item` – Crée un fichier/dossier  
+- `Get-ChildItem` – Liste fichiers/dossiers (équivalent de `ls`)  
+- `Set-ExecutionPolicy` – Définit les permissions d’exécution de scripts  
+- `Test-Connection` – Teste la connectivité réseau (équivalent de `ping`)  
+- `Get-Location` / `Set-Location` – Affiche ou change de répertoire (équivalent `pwd` / `cd`)
+---
+**Commandes Réseaux**  
+- `Test-Connection` – Ping réseau  
+- `Test-NetConnection` – Teste un port ou une connectivité réseau  
+- `Resolve-DnsName` – Résolution DNS (équivalent `nslookup`)  
+- `Get-NetIPAddress` – Liste des adresses IP des interfaces  
+- `New-NetIPAddress` – Configurer une adresse IP statique  
+- `Get-NetRoute` – Affiche la table de routage  
+- `New-NetRoute` – Ajoute une route statique  
+- `Get-NetAdapter` – Voir l’état des cartes réseau  
+- `Enable-NetAdapter` – Activer une carte réseau  
+- `Disable-NetAdapter` – Désactiver une carte réseau  
+- `Get-NetTCPConnection` – Voir les connexions TCP actives (équivalent `netstat`)  
+- `Get-NetFirewallRule` – Voir les règles du pare-feu  
+- `New-NetFirewallRule` – Ajouter une règle au pare-feu  
+- `Remove-NetFirewallRule` – Supprimer une règle pare-feu  
+- `Get-NetNeighbor` – Voir la table ARP (équivalent `arp -a`)  
+- `Get-DnsClientServerAddress` – Voir les DNS configurés  
+- `Set-DnsClientServerAddress` – Modifier les DNS  
+- `Get-NetIPConfiguration` – Infos globales réseau (équivalent `ipconfig /all`)  
+- `ipconfig` – Commande classique pour voir l’adresse IP et config réseau  
+- `tracert` – Tracer la route vers une destination 
