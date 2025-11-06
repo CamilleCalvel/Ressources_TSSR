@@ -48,8 +48,9 @@ openssl enc -chacha20 -in ais.txt -out ais_chacha20.enc
 
 **Comparer la taille des fichiers chiffrés**
 ls -lh ais*
-<img width="574" height="108" alt="Capture d&#39;écran 2025-11-05 160734" src="https://github.com/user-attachments/assets/f38abd03-4453-4211-b211-167375fdf4ac" />
-
+<p align="center">
+<img src="https://github.com/user-attachments/assets/f38abd03-4453-4211-b211-167375fdf4ac" alt="Pictures" width="600" >
+</p>
 
 **Modifier un fichier chiffré avec hexedit**
 hexedit ais_aes256cbc.enc
@@ -57,6 +58,9 @@ hexedit ais_aes256cbc.enc
 
 **Déchiffrer pour tester la détection d’erreur**
 openssl enc -d -aes-256-cbc -in ais_aes256cbc.enc -out test_dechiffre.txt
+<p align="center">
+<img src="https://github.com/user-attachments/assets/faaafd38-0ead-4900-99f8-a178f4c78166" alt="Pictures" width="700" >
+</p>
 
 **Déchiffrer tous les fichiers et comparer**
 AES :
@@ -132,10 +136,16 @@ cat simplon.txt
 
 **Calculer un hash SHA256 (avec l’utilitaire système)**
 sha256sum ~/simplon.txt
+<p align="center">
+<img src="https://github.com/user-attachments/assets/c2f0e181-30f3-497f-81f2-6ef02922aacb" alt="Pictures" width="700" >
+</p>
 
 **Calculer un hash SHA256 avec openssl**
 
 openssl dgst -sha256 simplon.txt
+<p align="center">
+<img src="https://github.com/user-attachments/assets/5fac4146-e07a-4ec6-86af-8d9b5523cc85" alt="Pictures" width="700" >
+</p>
 
 openssl dgst → permet de générer un digest (empreinte)
 sha256 → choisit l’algorithme SHA-256
@@ -146,6 +156,10 @@ sha512sum simplon.txt
 ou avec openssl
 openssl dgst -sha512 simplon.txt
 
+<p align="center">
+<img src="https://github.com/user-attachments/assets/ed281562-cf0e-4b0a-baf2-2816a071b267" alt="Pictures" width="700" >
+</p>
+
 **Vérification de l’intégrité**
 Modifie le fichier (ajoute un mot par exemple) :
 echo "!" >> simplon.txt
@@ -154,6 +168,15 @@ Recalcule SHA256 ou SHA512 :
 sha256sum simplon.txt
 
 Comparer au hash initial — s'il est différent, l'intégrité est rompue
+Avant modification :
+<p align="center">
+<img src="https://github.com/user-attachments/assets/c2f0e181-30f3-497f-81f2-6ef02922aacb" alt="Pictures" width="700" >
+</p>
+
+Après modification :
+<p align="center">
+<img src="https://github.com/user-attachments/assets/10f3c011-b9de-494a-aeac-ef5d71b23c39" alt="Pictures" width="700" >
+</p>
 
 **Créer une empreinte dans un fichier (fichier de signature/empreinte)**
 
@@ -162,14 +185,20 @@ sha256sum simplon.txt > simplon.sha256
 
 Le fichier contiendra: <hash>
 cat simplon.sha256
+<p align="center">
+<img src="https://github.com/user-attachments/assets/7f4b589e-074f-4359-855a-c7800f55e0df" alt="Pictures" width="700" >
+</p>
+
 
 **Vérifier l’empreinte (vérification automatique)**
 
 sha256sum -c ~/simplon.txt.sha256
 > sortie attendue: OK ou Réussi
 
-<img width="678" height="49" alt="Capture d&#39;écran 2025-11-06 002309" src="https://github.com/user-attachments/assets/6c8c5213-51b5-48fd-94ed-8655581f41fe" />
-<img width="774" height="42" alt="Sans titre" src="https://github.com/user-attachments/assets/4ee6a633-6799-4b0f-8c9a-bc4996f113cc" />
+<p align="center">
+<img src="https://github.com/user-attachments/assets/6c8c5213-51b5-48fd-94ed-8655581f41fe" alt="Pictures" width="600" >
+</p>
+
 
 ---
 </details>
