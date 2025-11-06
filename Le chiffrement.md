@@ -16,32 +16,54 @@ Une autorité de certification
 Une PKI 
 Le protocole SSL 
 Le protocole TLS 
+
 ---
 </details>
 
 <details><summary><h1>Pratique</h1></summary>  
   
-<details><summary><h2>Chiffrement symétrique</h2></summary>  
+<details><summary><h2>Chiffrement symétrique</h2></summary> 
 
-AES-256-GCM
+### Prérequis
+
+sudo apt update
+sudo apt install -y openssl hexedit
+
+**Préparer le fichier**
+
+Sur machine A (ou les deux pour tester) :
+
+mkdir -p ~/crypto_tests
+cd ~/crypto_tests
+echo "je suis en AIS chez Simplon" > ais.txt
+cat ais.txt
+
+**Chiffrer avec AES-256-CBC**
 openssl enc -aes-256-cbc -salt -in ais.txt -out ais_aes256cbc.enc
-ChaCha20
+
+**Chiffrer avec ChaCha20**
 openssl enc -chacha20 -in ais.txt -out ais_chacha20.enc
-Remarque les méthodes de chiffrement gcm et blowfish sont devenues obsolètes. Elles ne seront donc pas utilisés dans cette procédure 
-comparer les tailles des fichiers chiffrés
+
+> Remarque les méthodes de chiffrement gcm et blowfish sont devenues obsolètes. Elles ne seront donc pas utilisés dans cette procédure
+
+**Comparer la taille des fichiers chiffrés**
 ls -lh ais*
-Modifier un fichier chiffré avec hexedit
+
+
+**Modifier un fichier chiffré avec hexedit**
 hexedit ais_aes256cbc.enc
-Tester le déchiffrement (et la détection d’erreurs)
+> Dans hexedit : navigue (flèches), change un octet (ex : tape 00 -> FF), sauvegarde : Ctrl+X puis Y
+
+**Déchiffrer pour tester la détection d’erreur**
 openssl enc -d -aes-256-cbc -in ais_aes256cbc.enc -out test_dechiffre.txt
-Déchiffrer tous les fichiers et comparer
+
+**Déchiffrer tous les fichiers et comparer**
+AES :
 openssl enc -d -aes-256-cbc -in ais_aes256cbc.enc -out dec_aes256cbc.
 txt
-openssl enc -d -aes-256-gcm -in ais_aes256gcm.enc -out dec_aes256gc
-m.txt=
-chiffrement symétrique 1
-openssl enc -d -bf -in ais_blowfish.enc -out dec_blowfish.txt
+Chacha20 :
 openssl enc -d -chacha20 -in ais_chacha20.enc -out dec_chacha20.txt 
+
 ---
 </details>
 
@@ -82,6 +104,7 @@ Modifie quelques octets → sauvegarde et quitte
 Puis tente de déchiffrer avec la clé privée
 Tu devrais avoir une erreur ou du texte corrompu, preuve de la détection
 de modification.
+
 ---
 </details>
   
@@ -103,6 +126,8 @@ Recalcule SHA256 ou SHA512 :
 openssl dgst -sha256 simplon.txt
 Optionnel : sauvegarder le hash dans un fichier
 openssl dgst -sha256 simplon.txt > simplon_sha256.txt
+
 ---
 </details>
+
 </details>
