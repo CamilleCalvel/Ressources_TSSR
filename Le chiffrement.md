@@ -48,6 +48,7 @@ openssl enc -chacha20 -in ais.txt -out ais_chacha20.enc
 
 **Comparer la taille des fichiers chiffrés**
 ls -lh ais*
+<img width="574" height="108" alt="Capture d&#39;écran 2025-11-05 160734" src="https://github.com/user-attachments/assets/f38abd03-4453-4211-b211-167375fdf4ac" />
 
 
 **Modifier un fichier chiffré avec hexedit**
@@ -69,41 +70,56 @@ openssl enc -d -chacha20 -in ais_chacha20.enc -out dec_chacha20.txt
 
 <details><summary><h2>Chiffrement asymétrique</h2></summary>
 
-Sur la Machine 1 :
+**Créer le fichier ais.txt (sur la machine A)**
 cd /srv/partage
 echo "je suis en AIS chez Simplon_Campus_Distanciel" > ais.txt
-se placer dans un dossier local sécurisé pour la clé privée :
+
+**Générer la clé privée (private.pem) — sur A**
+Se placer dans un dossier local sécurisé pour la clé privée :
 mkdir -p ~/keys
 chmod 700 ~/keys
 Générer la clé privée
-openssl genpkey -algorithm RSA -out private.pem -pkeyopt rsa_keygen_bit
-s:2048
-puis sur le dossier partagé :
-Générer la clé publique à partir de la clé privée
+2048 bits (plus sûre que 1024)
+openssl genpkey -algorithm RSA -out ~/private.pem -pkeyopt rsa_keygen_bits:2048
+protéger la clé privée
+chmod 600 ~/private.pem
+
+**Générer la clé publique depuis la privée (public.pem) — sur A**
+
 openssl rsa -pubout -in private.pem -out public.pem
 Échanger la clé publique
 Copie public.pem dans le dossier partagé (déjà fait automatiquement si tu es
-dans /srv/partage )
+dans /srv/partage ) 
+cp ~/public.pem ~/shared_from_A/
+
+Ou par scp :
+scp ~/public.pem user@B_host:~/
+
 La Machine 2 pourra maintenant chiffrer un fichier pour toi
-Chiffrer le fichier avec la clé publique
+
+**Chiffrer le fichier avec la clé publique**
+
 Sur la Machine 2
-openssl pkeyutl -decrypt -inkey ~/keys/private.pem -in ais_encrypted.bin -
-chiffrement asymétrique 1
-out ais_decrypted.txt
-Le fichier ais_encrypted.bin est chiffré
-Il peut être envoyé à la Machine 1 pour déchiffrement
-Déchiffrer avec la clé privée
-Sur la Machine 1 :
-openssl pkeyutl -decrypt -inkey private.pem -in ais_encrypted.bin -out ais_
-decrypted.txt
+openssl pkeyutl -encrypt -pubin -inkey public.pem -in ~/ais.txt -out ~/ais.enc
+
+Il peut être envoyé à la Machine A pour déchiffrement
+
+**Déchiffrer avec la clé privée (sur A, qui a private.pem)**
+
+openssl pkeyutl -decrypt -inkey ~/private.pem -in ~/ais.txt.enc -out ~/ais_decrypted.txt
+
 Vérifie le contenu :
 cat ais_decrypted.txt
-Modifier le fichier chiffré et tester la détection d’erreur
-hexedit ais_encrypted.bin
+
+**Modifier le fichier chiffré à l’aide de hexedit**
+hexedit ais.enc
+
 Modifie quelques octets → sauvegarde et quitte
+> Dans hexedit, change 1 octet (ex: remplace un 00 par FF) ; quitter en sauvegardant (Ctrl+X puis y)
 Puis tente de déchiffrer avec la clé privée
-Tu devrais avoir une erreur ou du texte corrompu, preuve de la détection
-de modification.
+openssl pkeyutl -decrypt -inkey ~/private.pem -in ~/ais.txt.enc -out ~/ais_decrypted_after_edit.txt 2>err.txt || true
+afficher un éventuel message d'erreur
+cat err.txt
 
 ---
 </details>
@@ -113,19 +129,47 @@ de modification.
 Sur la machine 1 :
 echo "je suis chez moi mais j’apprends mieux" > simplon.txt
 cat simplon.txt
-Calculer le hash avec SHA256 (via OpenSSL)
+
+**Calculer un hash SHA256 (avec l’utilitaire système)**
+sha256sum ~/simplon.txt
+
+**Calculer un hash SHA256 avec openssl**
+
 openssl dgst -sha256 simplon.txt
+
 openssl dgst → permet de générer un digest (empreinte)
 sha256 → choisit l’algorithme SHA-256
-Calculer le hash avec SHA512
+
+**Calculer un hash SHA512**
+
+sha512sum simplon.txt
+ou avec openssl
 openssl dgst -sha512 simplon.txt
-Vérification de l’intégrité
+
+**Vérification de l’intégrité**
 Modifie le fichier (ajoute un mot par exemple) :
 echo "!" >> simplon.txt
+
 Recalcule SHA256 ou SHA512 :
-openssl dgst -sha256 simplon.txt
-Optionnel : sauvegarder le hash dans un fichier
-openssl dgst -sha256 simplon.txt > simplon_sha256.txt
+sha256sum simplon.txt
+
+Comparer au hash initial — s'il est différent, l'intégrité est rompue
+
+**Créer une empreinte dans un fichier (fichier de signature/empreinte)**
+
+Créer fichier contenant le hash (format attendu par sha256sum -c)
+sha256sum simplon.txt > simplon.sha256
+
+Le fichier contiendra: <hash>
+cat simplon.sha256
+
+**Vérifier l’empreinte (vérification automatique)**
+
+sha256sum -c ~/simplon.txt.sha256
+> sortie attendue: OK ou Réussi
+
+<img width="678" height="49" alt="Capture d&#39;écran 2025-11-06 002309" src="https://github.com/user-attachments/assets/6c8c5213-51b5-48fd-94ed-8655581f41fe" />
+<img width="774" height="42" alt="Sans titre" src="https://github.com/user-attachments/assets/4ee6a633-6799-4b0f-8c9a-bc4996f113cc" />
 
 ---
 </details>
